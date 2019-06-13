@@ -11,14 +11,14 @@ namespace WpfApp2
     public class VM : INotifyPropertyChanged
     {
 
-        ObservableCollection<string> lines;
+        
 
         public VM()
         {
             this.lines = new ObservableCollection<string>();
             this.Lines = new ObservableCollection<string>();
         }
-
+        ObservableCollection<string> lines;
         public ObservableCollection<string> Lines {
             get
             {
@@ -27,13 +27,27 @@ namespace WpfApp2
             set
             {
                 lines = value;
-                OnPropertyChanged("Lines");
+                OnPropertyChanged(nameof(Lines));
             }
         }
+        ObservableCollection<string> decryptedlines;
+        public ObservableCollection<string> DecryptedLines
+        {
+            get
+            {
+                return decryptedlines;
+            }
+            set
+            {
+                decryptedlines = value;
+                OnPropertyChanged(nameof(DecryptedLines));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string p)
         {
-            PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(p)));
+            PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(p));
         }
     }
 }

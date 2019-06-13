@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,50 +27,121 @@ namespace WpfApp2
         public MainWindow()
         {
             InitializeComponent();
+            VM.Lines = new ObservableCollection<string>();
+            VM.DecryptedLines = new ObservableCollection<string>();
             DataContext = VM;
         }
-        static List<string> lines;
-        static string line;
-        static StreamReader file;
-        ThreadStart ts;
-        Thread t;
+        static ThreadStart threadStart;
+        static Thread thread;
+        static ThreadStart decryptedthreadStart;
+        static Thread decryptedthread;
         private void Read_BtnClick(object sender, RoutedEventArgs e)
         {
-            ts = new ThreadStart(Method);
-            t = new Thread(ts);
-            t.Start();
+            threadStart = new ThreadStart(ReadFromFile);
+            thread = new Thread(threadStart);
+            thread.Start();
         }
-
+        [Obsolete]
         private void PauseResume_BtnClick(object sender, RoutedEventArgs e)
         {
-
+            if (thread.IsAlive == true)
+            {
+                if (PR.Content.ToString() == "Pause")
+                {
+                    PR.Content = "Resume";
+                    thread.Suspend();
+                }
+                else
+                {
+                    PR.Content = "Pause";
+                    thread.Resume();
+                }
+            }
+            else Console.WriteLine("Push read button");
         }
 
         private void Stop_BtnClick(object sender, RoutedEventArgs e)
         {
-
+            thread.Abort();
         }
 
         private void Start_Encrypt_BtnClick(object sender, RoutedEventArgs e)
         {
-
+            StreamReader reader = new StreamReader("text.txt");
+            while ((reader.ReadLine()) != null)
+            {
+                App.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    VM.DecryptedLines.Add(reader.ReadLine());
+                });
+                Thread.Sleep(500);
+            }
         }
 
         private void PauseResume_Encrypt_BtnClick(object sender, RoutedEventArgs e)
         {
-
+            if (thread.IsAlive == true)
+            {
+                if (DePR.Content.ToString() == "Pause")
+                {
+                    DePR.Content = "Resume";
+                    thread.Suspend();
+                }
+                else
+                {
+                    DePR.Content = "Pause";
+                    thread.Resume();
+                }
+            }
+            else Console.WriteLine("Push read button");
         }
 
         private void Stop_Encrypt_BtnClick(object sender, RoutedEventArgs e)
         {
 
         }
-        static void Method()
+        static void ReadFromFile()
         {
-            file = new StreamReader(@"test.txt");
-            while ((line = file.ReadLine()) != null)
-                VM.Lines.Add(line);
-            file.Close();
+            if (!File.Exists(@"text.txt"))
+            {
+                for (int i = 0; i < 10000; i++)
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        VM.Lines.Add(StringCipher.Encrypt(i.ToString(),"Islam"));
+                    });
+                    Thread.Sleep(500);
+                }
+                File.WriteAllLines(@"text.txt", VM.Lines);
+            }
+            else
+            {
+                StreamReader reader = new StreamReader("text.txt");
+                while ((reader.ReadLine()) != null)
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        VM.Lines.Add(reader.ReadLine());
+                    });
+                    Thread.Sleep(500);
+                }
+            }
+        }
+        static void ReadFromFileForDecryption()
+        {
+            if (File.Exists(@"text.txt"))
+            {
+                StreamReader reader = new StreamReader("text.txt");
+                while ((reader.ReadLine()) != null)
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        VM.Lines.Add(reader.ReadLine());
+                    });
+                    Thread.Sleep(500);
+                }
+            }
+            else Console.WriteLine("There is not any file");
         }
     }
 }

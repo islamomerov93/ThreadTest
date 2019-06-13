@@ -17,20 +17,20 @@
         </Grid.RowDefinitions>
         <StackPanel>
             <Label HorizontalAlignment="Center" FontSize="20" FontWeight="Bold">Reading from file</Label>
-            <DataGrid x:Name="DG1" BorderThickness="2" BorderBrush="Black" Margin="10" ItemsSource="{Binding lines, UpdateSourceTrigger=PropertyChanged}"/>
+            <ListView Height="280" x:Name="LV1" BorderThickness="2" BorderBrush="Black" Margin="10" ItemsSource="{Binding Lines, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <Label HorizontalAlignment="Center" FontSize="20" FontWeight="Bold">Encrypt informations</Label>
-            <DataGrid x:Name="DG2" BorderThickness="2" BorderBrush="Black" Margin="10" ItemsSource="{Binding Lines}"/>
+            <ListView Height="280" x:Name="LV2" BorderThickness="2" BorderBrush="Black" Margin="10" ItemsSource="{Binding DecryptedLines, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
             <Button Margin="8" Width="115" Height="50" Click="Read_BtnClick">Read</Button>
-            <Button Margin="8" Width="115" Height="50" Click="PauseResume_BtnClick">Pause</Button>
+            <Button Name="PR" Margin="8" Width="115" Height="50" Click="PauseResume_BtnClick">Pause</Button>
             <Button Margin="8" Width="115" Height="50" Click="Stop_BtnClick">Stop</Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
             <Button Margin="8" Width="115" Height="50" Click="Start_Encrypt_BtnClick">Start</Button>
-            <Button Margin="8" Width="115" Height="50" Click="PauseResume_Encrypt_BtnClick">Pause</Button>
+            <Button Name="DePR" Margin="8" Width="115" Height="50" Click="PauseResume_Encrypt_BtnClick">Pause</Button>
             <Button Margin="8" Width="115" Height="50" Click="Stop_Encrypt_BtnClick">Stop</Button>
         </StackPanel>
     </Grid>

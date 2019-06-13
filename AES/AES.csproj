@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{83B0A1BA-909C-485A-A9B7-B8BBDEF46A04}</ProjectGuid>
+    <ProjectGuid>{4F753FA9-2C3C-441D-8B08-C251C0E3056A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WpfApp2</RootNamespace>
-    <AssemblyName>WpfApp2</AssemblyName>
+    <RootNamespace>AES</RootNamespace>
+    <AssemblyName>AES</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -55,8 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="StringCipher.cs" />
-    <Compile Include="VM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
