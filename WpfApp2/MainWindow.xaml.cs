@@ -67,30 +67,24 @@ namespace WpfApp2
 
         private void Start_Encrypt_BtnClick(object sender, RoutedEventArgs e)
         {
-            StreamReader reader = new StreamReader("text.txt");
-            while ((reader.ReadLine()) != null)
-            {
-                App.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    VM.DecryptedLines.Add(reader.ReadLine());
-                });
-                Thread.Sleep(500);
-            }
+            decryptedthreadStart = new ThreadStart(ReadFromFileForDecryption);
+            decryptedthread = new Thread(decryptedthreadStart);
+            decryptedthread.Start();
         }
 
         private void PauseResume_Encrypt_BtnClick(object sender, RoutedEventArgs e)
         {
-            if (thread.IsAlive == true)
+            if (decryptedthread.IsAlive == true)
             {
                 if (DePR.Content.ToString() == "Pause")
                 {
                     DePR.Content = "Resume";
-                    thread.Suspend();
+                    decryptedthread.Suspend();
                 }
                 else
                 {
                     DePR.Content = "Pause";
-                    thread.Resume();
+                    decryptedthread.Resume();
                 }
             }
             else Console.WriteLine("Push read button");
@@ -98,7 +92,7 @@ namespace WpfApp2
 
         private void Stop_Encrypt_BtnClick(object sender, RoutedEventArgs e)
         {
-
+            decryptedthread.Abort();
         }
         static void ReadFromFile()
         {
@@ -129,19 +123,14 @@ namespace WpfApp2
         }
         static void ReadFromFileForDecryption()
         {
-            if (File.Exists(@"text.txt"))
+            for (int i = 0; i < VM.Lines.Count; i++)
             {
-                StreamReader reader = new StreamReader("text.txt");
-                while ((reader.ReadLine()) != null)
+                App.Current.Dispatcher.Invoke((Action)delegate
                 {
-                    App.Current.Dispatcher.Invoke((Action)delegate
-                    {
-                        VM.Lines.Add(reader.ReadLine());
-                    });
-                    Thread.Sleep(500);
-                }
+                    VM.DecryptedLines.Add(StringCipher.Decrypt(VM.Lines[i],"Islam"));
+                });
+                Thread.Sleep(500);
             }
-            else Console.WriteLine("There is not any file");
         }
     }
 }
